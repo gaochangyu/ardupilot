@@ -1005,7 +1005,13 @@ void GCS_MAVLINK::handleMessage(mavlink_message_t* msg)
         hal.rcin->set_overrides(v, 8);
 
         // record that rc are overwritten so we can trigger a failsafe if we lose contact with groundstation
-        failsafe.rc_override_active = true;
+        if(packet.chan3_raw < 975){
+          failsafe.rc_override_active = false;
+          hal.rcin->clear_overrides();
+        }else{
+          failsafe.rc_override_active = true;
+        }
+
         // a RC override message is consiered to be a 'heartbeat' from the ground station for failsafe purposes
         failsafe.last_heartbeat_ms = millis();
         break;
