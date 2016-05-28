@@ -1,6 +1,8 @@
 // -*- tab-width: 4; Mode: C++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
 // default sensors are present and healthy: gyro, accelerometer, barometer, rate_control, attitude_stabilization, yaw_position, altitude control, x/y position control, motor_control
+#include <GCS.h>
+
 #define MAVLINK_SENSOR_PRESENT_DEFAULT (MAV_SYS_STATUS_SENSOR_3D_GYRO | MAV_SYS_STATUS_SENSOR_3D_ACCEL | MAV_SYS_STATUS_SENSOR_ABSOLUTE_PRESSURE | MAV_SYS_STATUS_SENSOR_ANGULAR_RATE_CONTROL | MAV_SYS_STATUS_SENSOR_ATTITUDE_STABILIZATION | MAV_SYS_STATUS_SENSOR_YAW_POSITION | MAV_SYS_STATUS_SENSOR_Z_ALTITUDE_CONTROL | MAV_SYS_STATUS_SENSOR_XY_POSITION_CONTROL | MAV_SYS_STATUS_SENSOR_MOTOR_OUTPUTS | MAV_SYS_STATUS_AHRS)
 
 // forward declarations to make compiler happy
@@ -718,7 +720,7 @@ const AP_Param::GroupInfo GCS_MAVLINK::var_info[] PROGMEM = {
 
 
 // see if we should send a stream now. Called at 50Hz
-bool GCS_MAVLINK::stream_trigger(enum streams stream_num)
+bool GCS_MAVLINK::stream_trigger(enum streams stream_num) // Todo: change stream rate
 {
     if (stream_num >= NUM_STREAMS) {
         return false;
@@ -740,8 +742,12 @@ bool GCS_MAVLINK::stream_trigger(enum streams stream_num)
         // we're triggering now, setup the next trigger point
         if (rate > 50) {
             rate = 50;
+        }else if(rate > 25){
+            stream_ticks[stream_num] = 0 + stream_slowdown;
+        }else {
+            stream_ticks[stream_num] = (50 / rate) + stream_slowdown;
         }
-        stream_ticks[stream_num] = (50 / rate) + stream_slowdown;
+
         return true;
     }
 
