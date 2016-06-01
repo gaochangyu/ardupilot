@@ -1033,9 +1033,9 @@ void GCS_MAVLINK::send_radio_in(uint8_t receiver_rssi)
 #endif
 }
 
-void GCS_MAVLINK::send_raw_imu(const AP_InertialSensor &ins, const Compass &compass)
+void GCS_MAVLINK::send_raw_imu(const AP_InertialSensor &ins, const Compass &compass, const AP_AHRS &ahrs)
 {
-    const Vector3f &accel = ins.get_accel(0);
+    const Vector3f &accel = ahrs.get_accel_ef();//gao
     const Vector3f &gyro = ins.get_gyro(0);
     const Vector3f &mag = compass.get_field(0);
 

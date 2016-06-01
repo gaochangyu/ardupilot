@@ -546,7 +546,7 @@ bool GCS_MAVLINK::try_send_message(enum ap_message id)
 
     case MSG_RAW_IMU1:
         CHECK_PAYLOAD_SIZE(RAW_IMU);
-        gcs[chan-MAVLINK_COMM_0].send_raw_imu(ins, compass);
+        gcs[chan-MAVLINK_COMM_0].send_raw_imu(ins, compass,ahrs);
         break;
 
     case MSG_RAW_IMU2:
