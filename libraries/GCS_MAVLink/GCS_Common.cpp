@@ -1129,6 +1129,22 @@ void GCS_MAVLINK::send_ahrs(AP_AHRS &ahrs)
         ahrs.get_error_yaw());
 }
 
+void GCS_MAVLINK::send_extended_sys_state()
+{
+    uint8_t landed = MAV_LANDED_STATE_UNDEFINED;
+    uint8_t vtol = MAV_VTOL_STATE_UNDEFINED;
+    if(ap.land_complete){
+        landed = MAV_LANDED_STATE_ON_GROUND;
+    }else{
+        landed = MAV_LANDED_STATE_IN_AIR;
+    }
+    mavlink_msg_extended_sys_state_send(
+            chan,
+            vtol,
+            landed
+    );
+}
+
 /*
   send a statustext message to all active MAVLink connections
  */

@@ -49,6 +49,7 @@ enum ap_message {
     MSG_RANGEFINDER,
     MSG_TERRAIN,
     MSG_BATTERY2,
+    MSG_EXT_SYS_STATE,
     MSG_RETRY_DEFERRED // this must be last
 };
 
@@ -198,6 +199,7 @@ public:
     void send_sensor_offsets(const AP_InertialSensor &ins, const Compass &compass, AP_Baro &barometer);
     void send_ahrs(AP_AHRS &ahrs);
     void send_battery2(const AP_BattMonitor &battery);
+    void send_extended_sys_state();
 
     // return a bitmap of active channels. Used by libraries to loop
     // over active channels to send to all active channels    
@@ -343,6 +345,8 @@ private:
 
     // return true if this channel has hardware flow control
     bool have_flow_control(void);
+
+
 };
 
 #endif // __GCS_H

@@ -616,6 +616,11 @@ bool GCS_MAVLINK::try_send_message(enum ap_message id)
 #endif
         break;
 
+    case MSG_EXT_SYS_STATE:
+        CHECK_PAYLOAD_SIZE(MAVLINK_MSG_ID_EXTENDED_SYS_STATE);
+        send_extended_sys_state();
+        break;
+        
     case MSG_HWSTATUS:
         CHECK_PAYLOAD_SIZE(HWSTATUS);
         send_hwstatus(chan);
