@@ -617,10 +617,10 @@ bool GCS_MAVLINK::try_send_message(enum ap_message id)
         break;
 
     case MSG_EXT_SYS_STATE:
-        CHECK_PAYLOAD_SIZE(MAVLINK_MSG_ID_EXTENDED_SYS_STATE);
-        send_extended_sys_state();
+        //CHECK_PAYLOAD_SIZE(EXTENDED_SYS_STATE);
+        send_extended_sys_state(ap.land_complete);
         break;
-        
+
     case MSG_HWSTATUS:
         CHECK_PAYLOAD_SIZE(HWSTATUS);
         send_hwstatus(chan);
@@ -797,6 +797,7 @@ GCS_MAVLINK::data_stream_send(void)
         send_message(MSG_RAW_IMU1);
         send_message(MSG_RAW_IMU2);
         send_message(MSG_RAW_IMU3);
+        send_message(MSG_EXT_SYS_STATE);
     }
 
     if (gcs_out_of_time) return;
